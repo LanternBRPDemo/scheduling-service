@@ -121,6 +121,29 @@ Operator assignments are extracted from appointment metadata fields:
 
 The service includes integration with the frontend scheduling views (Day, Week, Month) that support both mock data and live API data through a toggle switch.
 
+## Deployment
+
+The service is containerized and ready for deployment on Railway or any Docker-compatible platform.
+
+### Quick Deploy to Railway
+
+1. Connect your GitHub repository to Railway
+2. Configure environment variables (see [DEPLOYMENT.md](./DEPLOYMENT.md))
+3. Deploy - Railway will auto-detect the Dockerfile
+
+### Docker Deployment
+
+```bash
+# Build and run with Docker Compose
+docker-compose up -d
+
+# Or build standalone
+docker build -t scheduling-service .
+docker run -p 4015:4015 --env-file .env scheduling-service
+```
+
+For detailed deployment instructions including Railway configuration, environment variables, and troubleshooting, see [DEPLOYMENT.md](./DEPLOYMENT.md).
+
 ## License
 
 Private - LanternBRP

@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  scheduling-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4015:4015"
+    environment:
+      # Database Configuration
+      DB_HOST: ${DB_HOST:-host.docker.internal}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_NAME: ${DB_NAME:-lantern_erp}
+      DB_USER: ${DB_USER:-lantern}
+      DB_PASSWORD: ${DB_PASSWORD:-lantern_dev_password}
+      DB_SCHEMA: ${DB_SCHEMA:-scheduling_service}
+
+      # Redis Configuration
+      REDIS_HOST: ${REDIS_HOST:-host.docker.internal}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+
+      # Service Configuration
+      SERVICE_NAME: scheduling-service
+      SERVICE_PORT: 4015
+      NODE_ENV: ${NODE_ENV:-development}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+
+      # CORS Configuration
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+    networks:
+      - lantern-network
+    depends_on:
+      - postgres
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4015/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: lantern_erp
+      POSTGRES_USER: lantern
+      POSTGRES_PASSWORD: lantern_dev_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - lantern-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    networks:
+      - lantern-network
+    restart: unless-stopped
+
+networks:
+  lantern-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

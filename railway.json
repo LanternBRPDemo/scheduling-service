@@ -1,0 +1,22 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "DOCKERFILE",
+    "dockerfilePath": "Dockerfile"
+  },
+  "deploy": {
+    "numReplicas": 1,
+    "startCommand": "sh -c \"npm run migrate && node dist/main.js\"",
+    "healthcheckPath": "/health",
+    "healthcheckTimeout": 3,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 3
+  },
+  "variables": {
+    "SERVICE_NAME": "scheduling-service",
+    "SERVICE_PORT": "4015",
+    "NODE_ENV": "production",
+    "DB_SCHEMA": "scheduling_service",
+    "LOG_LEVEL": "info"
+  }
+}

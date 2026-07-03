@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+LICENSE
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+coverage/
+.nyc_output
+*.test.ts
+*.spec.ts
+
+# Development files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Docker files (when building)
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Railway
+railway.json
+
+# TypeScript
+*.tsbuildinfo
