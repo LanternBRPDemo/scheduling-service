@@ -7,11 +7,7 @@ const SERVICE_NAME = process.env.SERVICE_NAME || 'scheduling-service';
 
 async function startServer() {
   try {
-    // Test database connection
-    await db.raw('SELECT 1');
-    console.log('✅ Database connected successfully');
-
-    // Create and start Express app
+    // Create and start Express app immediately for health checks
     const app = createApp(db);
 
     app.listen(PORT, () => {
@@ -19,6 +15,16 @@ async function startServer() {
       console.log(`📍 Health check: http://localhost:${PORT}/health`);
       console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
     });
+
+    // Test database connection asynchronously
+    db.raw('SELECT 1')
+      .then(() => {
+        console.log('✅ Database connected successfully');
+      })
+      .catch((error) => {
+        console.error('⚠️ Database connection failed:', error.message);
+        console.log('Service continues running for health checks...');
+      });
   } catch (error) {
     console.error('❌ Failed to start server:', error);
     process.exit(1);

@@ -60,5 +60,5 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 # Start with dumb-init to handle signals properly
 ENTRYPOINT ["dumb-init", "--"]
 
-# Run migrations and start the service
-CMD ["sh", "-c", "npm run migrate && node dist/main.js"]
+# Start the service (migrations should be run separately during deployment)
+CMD ["node", "dist/main.js"]

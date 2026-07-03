@@ -51,8 +51,11 @@ CORS_ORIGIN=https://your-frontend-domain.railway.app
    - Auto-restart on failure (max 3 retries)
 
 3. **Database Migration**
-   - Migrations run automatically on deploy via start command
-   - Check logs to ensure migrations complete successfully
+   - Run migrations manually after deployment:
+     ```bash
+     railway run npm run migrate
+     ```
+   - Or set up a Railway deployment hook to run migrations
 
 4. **Verify Deployment**
    ```bash

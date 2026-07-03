@@ -9,6 +9,15 @@ import { Knex } from 'knex';
 export function createRoutes(db: Knex): Router {
   const router = Router();
 
+  // Health check routes (no auth required - must be first!)
+  router.get('/health', (req, res) => {
+    res.json({
+      status: 'healthy',
+      service: 'scheduling-service',
+      timestamp: new Date().toISOString()
+    });
+  });
+
   // Initialize services and controllers
   const scheduleService = new ScheduleService(db);
   const scheduleController = new ScheduleController(scheduleService);
@@ -17,11 +26,6 @@ export function createRoutes(db: Knex): Router {
 
   // Apply Gateway authentication middleware
   router.use(gatewayAuthMiddleware());
-
-  // Health check routes (no auth required)
-  router.get('/health', (req, res) => {
-    res.json({ status: 'healthy', service: 'scheduling-service' });
-  });
 
   // Apply tenant middleware for protected routes
   router.use('/api', tenantMiddleware);
